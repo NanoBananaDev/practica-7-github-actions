@@ -6,7 +6,7 @@ test('calcula 10 % de descuento sobre dos productos de 50', () => {
   assert.deepEqual(calcularTotal(50, 2, 10), {
     subtotalCentavos: 10000,
     descuentoCentavos: 1000,
-    totalCentavos: 8000
+    totalCentavos: 9000
   });
 });
 
