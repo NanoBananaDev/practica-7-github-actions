@@ -1,0 +1,53 @@
+name: CI y entrega demostrativa
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    name: Compilar y probar
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Preparar Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Compilar aplicación
+        run: npm run build
+      - name: Ejecutar pruebas unitarias
+        run: npm test
+      - name: Guardar resultado compilado
+        uses: actions/upload-artifact@v7
+        with:
+          name: sitio-compilado
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  entregar:
+    name: Entrega simulada
+    needs: verificar
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperar artefacto aprobado
+        uses: actions/download-artifact@v8
+        with:
+          name: sitio-compilado
+          path: dist/
+      - name: Registrar entrega demostrativa
+        run: |
+          test -f dist/index.html
+          echo '### Entrega simulada aprobada' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Las pruebas pasaron y el sitio compilado está disponible como artefacto.' >> "$GITHUB_STEP_SUMMARY"
