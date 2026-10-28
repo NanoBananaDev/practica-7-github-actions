@@ -15,7 +15,9 @@ Para abrir la aplicación, sirve la carpeta `dist/` con un servidor HTTP local, 
 
 ## Pipeline
 
-El archivo [`.github/workflows/ci.yml`](.github/workflows/ci.yml) se ejecuta con `push` y `pull_request` hacia `main`, además de manualmente. El job `verificar` compila, prueba y guarda `dist/` como artefacto. El job `entregar` depende de `verificar` y solo se ejecuta después de un `push` a `main` con todas las pruebas aprobadas. La entrega es **simulada**: registra el resultado en el resumen del workflow y deja un artefacto descargable; no publica en un servidor externo.
+El archivo [`.github/workflows/ci.yml`](.github/workflows/ci.yml) se ejecuta con `push` y `pull_request` hacia `main`, además de manualmente. El job `verificar` compila, prueba y guarda `dist/` como artefacto. `preparar_paginas` recupera el sitio aprobado y lo empaqueta para GitHub Pages. `desplegar` publica el sitio. Los dos últimos jobs solo se ejecutan después de un `push` a `main` con pruebas aprobadas. Si una prueba falla, ambos quedan omitidos y la versión publicada anteriormente permanece disponible.
+
+Para activar el despliegue, el repositorio debe ser público o tener un plan que permita GitHub Pages en repositorios privados. En **Settings → Pages → Build and deployment → Source**, selecciona **GitHub Actions**. Después, un push a `main` mostrará la URL en el job `Desplegar en GitHub Pages`.
 
 ## Demostración
 

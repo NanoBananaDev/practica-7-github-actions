@@ -3,7 +3,14 @@
 ## Preparación antes de exponer
 
 1. Crea un repositorio vacío en GitHub, por ejemplo `practica-7-github-actions`. No añadas README ni `.gitignore` en GitHub: ya existen aquí.
-2. Desde esta carpeta ejecuta:
+2. Esta carpeta ya tiene Git inicializado en `main` y un commit preparado. Desde aquí ejecuta:
+
+```bash
+git remote add origin https://github.com/TU_USUARIO/practica-7-github-actions.git
+git push -u origin main
+```
+
+Si trabajas desde el ZIP en otra carpeta, primero inicializa el repositorio:
 
 ```bash
 git init
@@ -14,8 +21,8 @@ git remote add origin https://github.com/TU_USUARIO/practica-7-github-actions.gi
 git push -u origin main
 ```
 
-3. Abre la pestaña **Actions** del repositorio y confirma que `CI y entrega demostrativa` termina en verde. Abre `Compilar y probar`, verifica las etapas y descarga `sitio-compilado`. Abre `Entrega simulada` y su resumen.
-4. Si GitHub pide aprobar la ejecución de Actions, actívala en el repositorio. Comprueba que el repositorio permite las acciones de GitHub usadas en el YAML.
+3. En **Settings → Pages → Build and deployment → Source**, elige **GitHub Actions**. Para una cuenta gratuita, usa un repositorio público. Si GitHub pide aprobar Actions, actívalo en el repositorio.
+4. Abre la pestaña **Actions** y confirma que `CI y despliegue en GitHub Pages` termina en verde. Abre `Compilar y probar`, verifica las etapas y descarga `sitio-compilado`. Abre `Desplegar en GitHub Pages` y visita la URL publicada.
 
 ## Exposición de 16 minutos
 
@@ -29,7 +36,7 @@ git commit -m "Cambiar precio inicial de la demo"
 git push
 ```
 
-Muestra la nueva ejecución verde en Actions y el artefacto `sitio-compilado`.
+Muestra la nueva ejecución verde en Actions, el artefacto `sitio-compilado` y la página publicada con el nuevo precio inicial.
 
 **Minutos 8–13, fallo controlado.** En `tests/calculadora.test.js`, cambia solo la expectativa `totalCentavos: 9000` por `totalCentavos: 8000`. El cálculo real sigue dando 9000. Ejecuta `npm test` para mostrar el fallo y publica:
 
@@ -39,7 +46,7 @@ git commit -m "Simular prueba fallida"
 git push
 ```
 
-Muestra el job `Compilar y probar` rojo, el mensaje de aserción en los logs y `Entrega simulada` omitido. El artefacto no se sube en esa ejecución porque el step de carga sigue a las pruebas. GitHub puede enviar notificaciones según la configuración personal; el fallo siempre queda registrado en Actions.
+Muestra el job `Compilar y probar` rojo, el mensaje de aserción en los logs y los jobs `Preparar artefacto para Pages` y `Desplegar en GitHub Pages` omitidos. El artefacto no se sube en esa ejecución porque el step de carga sigue a las pruebas. La página publicada conserva la versión anterior. GitHub puede enviar notificaciones según la configuración personal; el fallo siempre queda registrado en Actions.
 
 **Minutos 13–14, recuperación.** Corrige `8000` a `9000`, ejecuta las pruebas y publica un nuevo commit. Muestra que la nueva ejecución queda verde.
 
